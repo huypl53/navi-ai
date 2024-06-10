@@ -1,9 +1,9 @@
 from fastapi import APIRouter, File, UploadFile
 
-from model import NaviPredictor
+from worker import NaviWorker
 
 router = APIRouter()
-predictor = NaviPredictor()
+predictor = NaviWorker()
 
 
 @router.post("/get-mastery")
