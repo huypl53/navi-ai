@@ -1,26 +1,41 @@
-from sqlalchemy import create_engine, exists
-from sqlalchemy.orm import relationship, sessionmaker
+# from sqlalchemy import create_engine, exists
+# from sqlalchemy.orm import relationship, sessionmaker
 
-engine = create_engine("sqlite:///db.sqlite3")
+# engine = create_engine("sqlite:///db.sqlite3")
 """
     sqlite:///:memory: (or, sqlite://)
     sqlite:///relative/path/to/file.db
     sqlite:////absolute/path/to/file.db
 """
 
-connection = engine.connect()
-Session = sessionmaker()
-Session.configure(bind=engine)
-session = Session()
+from collections.abc import AsyncGenerator
 
-# class Connector:
-#     connection = engine.connect()
-#     Session = sessionmaker()
-#     Session.configure(bind=engine)
-#     session = Session()
+from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy.ext.asyncio import async_sessionmaker
 
-#     def __init__(self) -> None:
-#         pass
+from app.config.setting import settings as global_settings
 
-#     def __del__(self):
-#         self.connection.close()
+# from app.utils.logging import AppLogger
+
+# logger = AppLogger().get_logger()
+
+engine = create_async_engine(
+    global_settings.asyncpg_url.unicode_string(),
+    future=True,
+    echo=True,
+)
+
+# expire_on_commit=False will prevent attributes from being expired
+# after commit.
+AsyncSessionFactory = async_sessionmaker(
+    engine,
+    autoflush=False,
+    expire_on_commit=False,
+)
+
+
+# Dependency
+async def get_db() -> AsyncGenerator:
+    async with AsyncSessionFactory() as session:
+        # logger.debug(f"ASYNC Pool: {engine.pool.status()}")
+        yield session

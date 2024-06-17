@@ -4,9 +4,9 @@ import time
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 
-from utils.logger import Logger
+from app.utils.logging import AppLogger
 
-LOGGER = Logger(__file__, log_file="http.log")
+logger = AppLogger().get_logger()
 
 
 class LogMiddleware(BaseHTTPMiddleware):
@@ -14,7 +14,7 @@ class LogMiddleware(BaseHTTPMiddleware):
         start_time = time.time()
         # response = time.time()
         process_time = time.time() - start_time
-        LOGGER.log.info(
+        logger.info(
             f"{request.client.host} - \"{request.method} {request.url.path } {request.scope['http_version']}\" {response.status_code} { process_time:.2f}s"
         )
         response = await call_next(request)

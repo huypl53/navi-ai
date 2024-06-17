@@ -1,2 +1,2 @@
-from middleware.cors import *
-from middleware.http import LogMiddleware
+from app.middleware.cors import *
+from app.middleware.http import LogMiddleware

@@ -1,14 +1,10 @@
 from fastapi import APIRouter, File, UploadFile
-
-from worker import NaviWorker
+from app.route.model import router as model_router
+from app.route.user import router as user_router
 
 router = APIRouter()
-predictor = NaviWorker()
 
 
-@router.post("/get-mastery")
+@router.get("/hello-world")
 async def get_mastery():
-
-    response = predictor.predict()
-
     return "yolo"
