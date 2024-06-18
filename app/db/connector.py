@@ -15,12 +15,12 @@ from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from app.config.setting import settings as global_settings
 
-# from app.utils.logging import AppLogger
+from app.utils.logging import AppLogger
 
-# logger = AppLogger().get_logger()
+logger = AppLogger().get_logger()
 
 engine = create_async_engine(
-    global_settings.asyncpg_url.unicode_string(),
+    global_settings.asyncmysql_url.unicode_string(),
     future=True,
     echo=True,
 )
@@ -37,5 +37,5 @@ AsyncSessionFactory = async_sessionmaker(
 # Dependency
 async def get_db() -> AsyncGenerator:
     async with AsyncSessionFactory() as session:
-        # logger.debug(f"ASYNC Pool: {engine.pool.status()}")
+        logger.debug(f"ASYNC Pool: {engine.pool.status()}")
         yield session
