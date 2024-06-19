@@ -10,6 +10,6 @@ from sqlalchemy.orm import mapped_column, Mapped, relationship
 model_user_md = Table(
     "model_user",
     BaseMd.metadata,
-    Column("model_id", String, ForeignKey("model.id")),
-    Column("user_id", String, ForeignKey("user.id")),
+    Column("model_id", Integer, ForeignKey("model.id")),
+    Column("user_id", Integer, ForeignKey("user.id")),
 )

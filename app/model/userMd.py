@@ -8,7 +8,7 @@ from app.model.baseMd import BaseMd
 class UserMd(BaseMd):
     __tablename__ = "user"
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    name = Column(String(256))
     # createAt = Column(DateTime)
     # modifiedAt = Column(DateTime)
     # models = relationship("Model", secondary=model_user_md,

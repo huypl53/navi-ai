@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Table, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, Table, DateTime, Text
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy.sql import func
 
@@ -11,8 +11,8 @@ class ModelMd(BaseMd):
     id = Column(Integer, primary_key=True)
     create_at = Column(DateTime, server_default=func.now())
     modified_at = Column(DateTime)
-    saved_at = Column(String)  # relative path to model .pkl
-    user_id = Column(String, ForeignKey("user.id"))
+    saved_at = Column(Text)  # relative path to model .pkl
+    user_id = Column(Integer, ForeignKey("user.id"))
 
     # users = relationship("User", secondary=model_user_md,
     #                      back_populates="models")
