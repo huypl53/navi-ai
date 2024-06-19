@@ -2,13 +2,14 @@
 
 ## Quickstart
 
-To run the server
+- Create `.env` file like `.env.local`
+- To run the server
 
 ```bash
 python ./server.py
 ```
 
-To init database
+- To init database
 
 ```bash
 python ./scripts/data_generator.py

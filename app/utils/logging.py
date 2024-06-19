@@ -10,16 +10,8 @@ log_formatter = logging.Formatter(
     "%(asctime)s [%(processName)s: %(process)d] [%(threadName)s: %(thread)d] [%(levelname)s] %(name)s: %(message)s"
 )
 
-
-class AppLogger(metaclass=SingletonMeta):
-    _logger = None
-
-    def __init__(self):
-        self._logger = logging.getLogger(__name__)
-        self._logger.addHandler(RichConsoleHandler())
-
-    def get_logger(self):
-        return self._logger
+console_handler = logging.StreamHandler()
+console_handler.setFormatter(log_formatter)
 
 
 class RichConsoleHandler(RichHandler):
@@ -27,3 +19,15 @@ class RichConsoleHandler(RichHandler):
         super().__init__(
             console=Console(color_system="256", width=width, style=style), **kwargs
         )
+
+
+class AppLogger(metaclass=SingletonMeta):
+    _logger = None
+
+    def __init__(self):
+        self._logger = logging.getLogger(__name__)
+        self._logger.addHandler(RichConsoleHandler())
+        self._logger.addHandler(console_handler)
+
+    def get_logger(self):
+        return self._logger

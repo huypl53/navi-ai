@@ -1,5 +1,4 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Table, DateTime, Text
-from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy.sql import func
 
 from app.model.relation import model_user_md
