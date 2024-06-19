@@ -21,7 +21,7 @@ class ModelRepo(BaseRepo):
         model: ModelMd = ModelMd(
             saved_at=model_path, modified_at=datetime.datetime.now()
         )
-        await self.save(model, db_session)
+        await self.create(model, db_session)
 
     async def get_model_by_user_skill(
         user_id: str, skill_id: str, db_session: AsyncSession = Depends(get_db)

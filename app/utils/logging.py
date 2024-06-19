@@ -17,7 +17,6 @@ class AppLogger(metaclass=SingletonMeta):
     def __init__(self):
         self._logger = logging.getLogger(__name__)
         self._logger.addHandler(RichConsoleHandler())
-        self._logger.setLevel(logging.INFO)
 
     def get_logger(self):
         return self._logger

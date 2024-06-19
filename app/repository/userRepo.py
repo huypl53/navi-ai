@@ -1,20 +1,18 @@
 from app.repository.baseRepo import BaseRepo
 from app.utils.logging import AppLogger
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.model import UserMd
-from app.db import get_db
-from fastapi import Depends
+from app.model.userMd import UserMd
+from app.schema import User
 
 logger = AppLogger().get_logger()
 
 
 class UserRepo(BaseRepo):
-    # def __init__(self) -> None:
-    #     pass
 
-    async def add_user(
-        self, id: str, name: str, db_session: AsyncSession = Depends(get_db)
+    async def create_user(
+        self, user: User, db_session: AsyncSession
     ):
-        logger.info(f"Create new user: {name}")
-        model: UserMd = UserMd(id=id, name=name)
-        await self.save(model, db_session)
+        logger.info(f"Create new user: {user}")
+        model: UserMd = UserMd(id=user.id, name=user.name)
+        await self.create(model, db_session)
+        return model

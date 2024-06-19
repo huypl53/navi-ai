@@ -8,10 +8,10 @@ services:
     # command: mysqld --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: navi@2024abc!
+      MYSQL_ROOT_PASSWORD: abc123
       MYSQL_DATABASE: aes
       MYSQL_USER: aes
-      MYSQL_PASSWORD: nav@2024abc!
+      MYSQL_PASSWORD: abc123
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
       - "3306:3306"

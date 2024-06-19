@@ -1,5 +1,3 @@
-# from sqlalchemy import create_engine, exists
-# from sqlalchemy.orm import relationship, sessionmaker
 
 # engine = create_engine("sqlite:///db.sqlite3")
 """
@@ -8,14 +6,19 @@
     sqlite:////absolute/path/to/file.db
 """
 
+from sqlalchemy import select
 from collections.abc import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.ext.asyncio import async_sessionmaker
+from app.utils.logging import AppLogger
+from fastapi import Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
 
 from app.config.setting import settings as global_settings
+from app.model import UserMd
 
-from app.utils.logging import AppLogger
 
 logger = AppLogger().get_logger()
 
