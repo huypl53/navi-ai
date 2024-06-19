@@ -1,5 +1,4 @@
 import logging
-import sys
 from rich.console import Console
 from rich.logging import RichHandler
 
@@ -22,7 +21,7 @@ class RichConsoleHandler(RichHandler):
 
 
 class AppLogger(metaclass=SingletonMeta):
-    _logger = None
+    # _logger = None
 
     def __init__(self):
         self._logger = logging.getLogger(__name__)

@@ -28,6 +28,7 @@ class AssignmentRepo(BaseRepo):
         return record
 
     async def get_assigment_by_user(self, user_id: int, db_sesison: AsyncSession):
+        # TODO: fix this
         assignments = select(AssignmentMd).where(
             AssignmentMd.user_id == user_id)
         logger.info(f'Get assignments by user {user_id}: {assignments}')

@@ -75,7 +75,8 @@ class Model:
         self._update_param(
             ["parallel", "num_fits", "seed", "defaults"], kwargs, keep=True
         )
-        self._update_param("model_type", self._update_defaults(kwargs), keep=True)
+        self._update_param(
+            "model_type", self._update_defaults(kwargs), keep=True)
 
     def fit(self, data_path=None, data=None, **kwargs):
         """
@@ -113,7 +114,8 @@ class Model:
         self._check_data(data_path, data)
         self._check_args(Model.FIT_ARGS, kwargs)
         self._update_param(
-            ["skills", "num_fits", "defaults", "fixed", "parallel", "forgets"], kwargs
+            ["skills", "num_fits", "defaults",
+                "fixed", "parallel", "forgets"], kwargs
         )
         if self.fit_model is None or self.fit_model == {}:
             self.fit_model = {}
@@ -191,7 +193,8 @@ class Model:
             df.loc[
                 all_data[skill]["index"], "correct_predictions"
             ] = correct_predictions
-            df.loc[all_data[skill]["index"], "state_predictions"] = state_predictions
+            df.loc[all_data[skill]["index"],
+                   "state_predictions"] = state_predictions
         return df
 
     def evaluate(self, data=None, data_path=None, metric=metrics.rmse):
@@ -288,7 +291,8 @@ class Model:
 
         self._check_args(Model.CV_ARGS, kwargs)
         self._update_param(
-            ["skills", "num_fits", "defaults", "parallel", "forgets", "seed", "folds"],
+            ["skills", "num_fits", "defaults",
+                "parallel", "forgets", "seed", "folds"],
             kwargs,
         )
         self._update_param("model_type", self._update_defaults(kwargs))
@@ -307,7 +311,8 @@ class Model:
         )
         self._update_param(["skills"], {"skills": list(all_data.keys())})
         for skill in all_data:
-            metric_vals[skill] = self._crossvalidate(all_data[skill], skill, metric)
+            metric_vals[skill] = self._crossvalidate(
+                all_data[skill], skill, metric)
         self.manual_param_init = False
         self.fit_model = {}
         df = pd.DataFrame(metric_vals.items())
@@ -360,7 +365,8 @@ class Model:
             if skill not in self.fit_model:
                 self.fit_model[skill] = {}
             if not self._check_params(values[skill]):
-                raise ValueError("error in length, type or non-existent parameter")
+                raise ValueError(
+                    "error in length, type or non-existent parameter")
             for param in values[skill]:
                 self.fit_model[skill][param] = values[skill][param]
         self.manual_param_init = True
@@ -398,7 +404,8 @@ class Model:
             for param in coefs[skill]:
                 classes = self._format_param(skill, param, coefs[skill][param])
                 for class_ in classes:
-                    formatted_coefs.append((skill, param, str(class_), classes[class_]))
+                    formatted_coefs.append(
+                        (skill, param, str(class_), classes[class_]))
         df = pd.DataFrame(formatted_coefs)
         df.columns = ["skill", "param", "class", "value"]
         return df.set_index(["skill", "param", "class"])
@@ -499,7 +506,8 @@ class Model:
             )
             optional_args = {"fixed": {}}
             if forgets:
-                fitmodel["forgets"] = self.rand.uniform(size=fitmodel["forgets"].shape)
+                fitmodel["forgets"] = self.rand.uniform(
+                    size=fitmodel["forgets"].shape)
             if self.model_type[Model.MODELS_BKT.index("multiprior")]:
                 fitmodel["prior"] = 0
             if self.manual_param_init and skill in self.fit_model:
@@ -673,14 +681,16 @@ class Model:
             and "guesses" in self.fit_model[skill]
             and len(self.fit_model[skill]["guesses"]) != num_gs
         ):
-            raise ValueError("invalid number of guess classes in initialization")
+            raise ValueError(
+                "invalid number of guess classes in initialization")
         if (
             self.fit_model
             and skill in self.fit_model
             and "slips" in self.fit_model[skill]
             and len(self.fit_model[skill]["slips"]) != num_gs
         ):
-            raise ValueError("invalid number of slip classes in initialization")
+            raise ValueError(
+                "invalid number of slip classes in initialization")
 
     def _check_args(self, expected_args, args):
         for arg in args:

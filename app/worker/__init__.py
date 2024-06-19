@@ -1,1 +1,1 @@
-from worker.navi import NaviWorker
+from app.worker.navi import NaviWorker
