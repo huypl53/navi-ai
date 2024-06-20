@@ -11,7 +11,7 @@ class ModelMd(BaseMd):
     create_at = Column(DateTime, server_default=func.now())
     modified_at = Column(DateTime)
     saved_at = Column(Text)  # relative path to model .pkl
-    user_id = Column(Integer )
+    user_id = Column(Integer)
     # user_id = Column(Integer, ForeignKey("user.id"))
 
     # users = relationship("User", secondary=model_user_md,

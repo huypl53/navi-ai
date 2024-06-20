@@ -2,6 +2,7 @@ from app.utils.logging import AppLogger
 from typing import List
 from pyBKT.models import Model
 import pandas as pd
+from app.schema import AssignmentSch
 
 MODELS_CONFIG = {}
 
@@ -28,16 +29,24 @@ class NaviWorker:
 
         self._model_num = len(self.models)
 
-    def predict(self, data: pd.DataFrame):
+    def predict(self, data: AssignmentSch):
+        data = data.model_dump()
+        df_assign = pd.DataFrame([data])
         results = []
         for m in self.models:
-            r = m.predict(data=data)
-            results.append()
-        if not len(results):
+            r = m.predict(data=df_assign)
+            results.append(r)
+
+        # cols: correct_predictions  state_predictions
+        try:
+            results = pd.concat(results)
+            state_prediction = results.loc[:, 'state_predictions'].mean()
+
+            logger.info(state_prediction)
+            return state_prediction
+        except Exception as e:
+            logger.error(f'Predict assignment failed! {e}')
             return None
-        return results
-        # corrects = [ for r in results]
-        # mastery_states = []
 
     def save(self):
         pass

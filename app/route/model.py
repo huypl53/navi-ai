@@ -21,7 +21,7 @@ async def calc_mastery(assignment: AssignmentSch, db_session: AsyncSession = Dep
     logger.info(f"Get assigment: {assignment}")
 
     # Write assigment to DB
-    assign = await _assigment_repo.add_assginment(assignment, db_session)
+    # assign = await _assigment_repo.add_assginment(assignment, db_session)
     # return result
     return await _model_repo.get_mastery(assignment, db_session)
 
@@ -29,4 +29,4 @@ async def calc_mastery(assignment: AssignmentSch, db_session: AsyncSession = Dep
 @router.post("/save-model")
 async def save_model_path(model: ModelSch, db_session: AsyncSession = Depends(get_db)):
     logger.info(f"Save model path, got: {model.saved_at}")
-    return await _model_repo.save_model(model.saved_at, db_session)
+    return await _model_repo.save_model(model, db_session)
