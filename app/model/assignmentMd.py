@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Table, DateTime, Text
-from app.model import BaseMd
+from app.model.baseMd import BaseMd
 
 
 class AssignmentMd(BaseMd):

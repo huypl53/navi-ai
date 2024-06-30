@@ -1,6 +1,5 @@
-from fastapi import APIRouter, File, UploadFile
+from fastapi import APIRouter
 from app.route.model import router as model_router
-from app.route.user import router as user_router
 from app.route.assignment import router as assignment_router
 
 router = APIRouter()
