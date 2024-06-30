@@ -6,18 +6,15 @@
     sqlite:////absolute/path/to/file.db
 """
 
-from sqlalchemy import select
 from collections.abc import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.ext.asyncio import async_sessionmaker
 from app.utils.logging import AppLogger
-from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
 from app.config.setting import settings as global_settings
-from app.model import UserMd
 
 
 logger = AppLogger().get_logger()
@@ -38,7 +35,7 @@ AsyncSessionFactory = async_sessionmaker(
 
 
 # Dependency
-async def get_db() -> AsyncGenerator:
+async def get_db() -> AsyncGenerator[AsyncSession]:
     async with AsyncSessionFactory() as session:
         logger.debug(f"ASYNC Pool: {engine.pool.status()}")
         yield session

@@ -1,6 +1,5 @@
 from app.utils.logging import AppLogger
 from typing import List
-from pyBKT.models import Model
 import pandas as pd
 from app.schema import AssignmentSch
 
@@ -16,16 +15,16 @@ class NaviWorker:
     """
 
     def __init__(self, model_paths: List[str]) -> None:
-        self.models: List[Model] = []
-        print(f'Paths: {model_paths}')
-        for p in model_paths:
-            try:
-                model = Model(seed=25)
-                model.load(p)
-                self.models.append(model)
-            except Exception as e:
-                print(f"Init model failed at {p}. Error: {e}")
-                logger.error(f"Init model failed at {p}. Error: {e}")
+        self.models: List = []
+        # print(f'Paths: {model_paths}')
+        # for p in model_paths:
+        #     try:
+        #         model = Model(seed=25)
+        #         model.load(p)
+        #         self.models.append(model)
+        #     except Exception as e:
+        #         print(f"Init model failed at {p}. Error: {e}")
+        #         logger.error(f"Init model failed at {p}. Error: {e}")
 
         self._model_num = len(self.models)
 

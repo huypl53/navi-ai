@@ -9,8 +9,11 @@ log_formatter = logging.Formatter(
     "%(asctime)s [%(processName)s: %(process)d] [%(threadName)s: %(thread)d] [%(levelname)s] %(name)s: %(message)s"
 )
 
-console_handler = logging.StreamHandler()
-console_handler.setFormatter(log_formatter)
+file_handler = logging.FileHandler('./bkt.log')
+file_handler.setFormatter(log_formatter)
+
+# console_handler = logging.StreamHandler()
+# console_handler.setFormatter(log_formatter)
 
 
 class RichConsoleHandler(RichHandler):
@@ -26,7 +29,7 @@ class AppLogger(metaclass=SingletonMeta):
     def __init__(self):
         self._logger = logging.getLogger(__name__)
         self._logger.addHandler(RichConsoleHandler())
-        self._logger.addHandler(console_handler)
+        self._logger.addHandler(file_handler)
 
     def get_logger(self):
         return self._logger

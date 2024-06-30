@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from app.repository import AssignmentRepo
 from app.schema import AssignmentSch
 from app.utils.logging import AppLogger
-from app.repository import ModelRepo
+from app.repository import BktParamsRepo
 from app.schema import ModelSch
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -12,7 +12,7 @@ logger = AppLogger().get_logger()
 
 router = APIRouter(prefix="/v1/model")
 
-_model_repo = ModelRepo()
+_model_repo = BktParamsRepo()
 _assigment_repo = AssignmentRepo()
 
 
