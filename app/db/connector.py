@@ -29,7 +29,7 @@ engine = create_async_engine(
 # after commit.
 AsyncSessionFactory = async_sessionmaker(
     engine,
-    autoflush=False,
+    # autoflush=False,
     expire_on_commit=False,
 )
 

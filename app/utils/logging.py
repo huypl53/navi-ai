@@ -24,7 +24,7 @@ class RichConsoleHandler(RichHandler):
 
 
 class AppLogger(metaclass=SingletonMeta):
-    # _logger = None
+    _logger = None
 
     def __init__(self):
         self._logger = logging.getLogger(__name__)

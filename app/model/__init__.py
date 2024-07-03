@@ -1,6 +1,6 @@
 from app.model.assignmentMd import AssignmentMd
 from app.model.baseMd import BaseMd
-from app.model.bktParamsMd import BktParams
+from app.model.bktParamsMd import BktParamsMd
 
 from app.model.masteryMultiGsMd import MasteryBktMultiGsMd
 from app.model.masteryMultiLearnMd import MasteryBktMultiLearnMd

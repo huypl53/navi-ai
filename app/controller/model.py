@@ -1,6 +1,6 @@
 from operator import itemgetter
 
-from app.model.bktParamsMd import BktParams
+from app.model.bktParamsMd import BktParamsMd
 from app.repository.bktParamsRepo import BktParamsRepo
 from app.schema.assignment import Assignment
 from app.utils.logging import AppLogger
@@ -11,7 +11,7 @@ logger = AppLogger().get_logger()
 
 class ModelController:
     def __init__(self) -> None:
-        self.modelRepo = BktParamsRepo(BktParams)
+        self.modelRepo = BktParamsRepo(BktParamsMd)
         pass
 
     def predict_mastery(self, assignment: Assignment):

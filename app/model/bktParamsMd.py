@@ -5,7 +5,7 @@ from sqlalchemy.sql import func
 from app.model import BaseMd
 
 
-class BktParams(BaseMd):
+class BktParamsMd(BaseMd):
     __tablename__ = "bkt_params"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     create_at: Mapped[str] = mapped_column(DateTime, server_default=func.now())

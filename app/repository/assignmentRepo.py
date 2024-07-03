@@ -14,6 +14,7 @@ class AssignmentRepo(BaseRepo):
     async def add_assginment(
         self, assignment: AssignmentSch, db_session: AsyncSession = None
     ) -> AssignmentMd | None:
+        is_new_sess = True if not db_session else False
         if not db_session:
             db_session = await anext(get_db())
         try:
@@ -29,7 +30,10 @@ class AssignmentRepo(BaseRepo):
                 assigment_id=assignment.assigment_id,
             )
             await self.create(record, db_session)
-            return record
+            # return record
         except Exception as e:
             logger.error(f'{e}. Create assignment {record.__dict__} failed!')
             return None
+        finally:
+            if is_new_sess:
+                await db_session.close()
