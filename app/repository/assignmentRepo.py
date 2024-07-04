@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.model import AssignmentMd
 from app.schema import AssignmentSch
-from app.db import get_db
+from app.db import get_db, session_factory
 
 logger = AppLogger().get_logger()
 
@@ -16,7 +16,8 @@ class AssignmentRepo(BaseRepo):
     ) -> AssignmentMd | None:
         is_new_sess = True if not db_session else False
         if not db_session:
-            db_session = await anext(get_db())
+            # db_session = await anext(get_db())
+            db_session = session_factory()
         try:
             record: AssignmentMd = AssignmentMd(
                 order_id=assignment.order_id,

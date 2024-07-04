@@ -27,7 +27,7 @@ engine = create_async_engine(
 
 # expire_on_commit=False will prevent attributes from being expired
 # after commit.
-AsyncSessionFactory = async_sessionmaker(
+session_factory = async_sessionmaker(
     engine,
     # autoflush=False,
     expire_on_commit=False,
@@ -35,7 +35,7 @@ AsyncSessionFactory = async_sessionmaker(
 
 
 # Dependency
-async def get_db() -> AsyncGenerator[AsyncSession]:
-    async with AsyncSessionFactory() as session:
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
+    async with session_factory() as session:
         logger.debug(f"ASYNC Pool: {engine.pool.status()}")
         yield session
