@@ -26,10 +26,12 @@ class RichConsoleHandler(RichHandler):
 class AppLogger(metaclass=SingletonMeta):
     _logger = None
 
-    def __init__(self):
-        self._logger = logging.getLogger(__name__)
+    def __init__(self, level=logging.WARNING):
+        # self._logger = logging.getLogger(__name__)
+        self._logger = logging.getLogger()
         self._logger.addHandler(RichConsoleHandler())
         self._logger.addHandler(file_handler)
+        self._logger.setLevel(level)
 
     def get_logger(self):
         return self._logger

@@ -17,7 +17,7 @@ from app.utils.logging import AppLogger
 from app.model.bktEnum import BKT_VARIANCES
 from app.model.masteryBktBaseMixin import MasteryBktBaseMixin
 from bkt.core import calc_pnl
-from app.db import get_db
+from app.db import session_factory
 
 logger = AppLogger().get_logger()
 
@@ -36,7 +36,7 @@ class BktParamsRepo(BaseRepo):
         self.assignmentRepo = AssignmentRepo()
 
     async def save_model(self, model: ModelSch, db_session: AsyncSession):
-        logger.info(f"DB is saving model at {model}")
+        logger.warning(f"DB is saving model at {model}")
         model: BktParamsMd = BktParamsMd(
             user_id=model.user_id,
             saved_at=model.saved_at,
@@ -73,15 +73,18 @@ class BktParamsRepo(BaseRepo):
                 pl = bkt_user_variance.pl
 
             mastery = calc_pnl(pl, m_ps, m_pt, m_pg, assignment.correct)
+            logger.warning(f'bkt_user_variance: {bkt_user_variance}')
             if bkt_user_variance is None:
                 asyncio.create_task(self.create_user_mastery_model(
                     BktUserVariance, assignment.user_id, assignment.skill_id, mastery))
 
             else:  # Use user's P(L) according to his skill
-                pl = bkt_user_variance.pl
+                bkt_user_variance.pl = mastery
+                await self.update_user_mastery_model(
+                    bkt_user_variance, db_session)
 
             result = {"mastery": mastery}
-            logger.info(result)
+            logger.warning(result)
             return result
         except Exception as e:
             # TODO: handle exception
@@ -114,23 +117,18 @@ class BktParamsRepo(BaseRepo):
     async def create_bkt_params(self, m_pl, m_ps, m_pt, m_pg, skill_id: int, active=2, db_session: AsyncSession = None):
         is_new_sess = True if not db_session else False
         if not db_session:
-            db_session = await anext(get_db())
-            is_new_session = True
+            db_session = session_factory()
         try:
             bkt_params_md = BktParamsMd()
             bkt_params_md.ppl, bkt_params_md.ps, bkt_params_md.pt, bkt_params_md.pg = m_pl, m_ps, m_pt, m_pg
             bkt_params_md.model_type = 2  # model to infer and experience
             bkt_params_md.create_at = datetime.now()
             bkt_params_md.modified_at = datetime.now()
-            logger.info('bkt_params_md is None, create new',
-                        bkt_params_md)
             # active:  2 - used for inference and experiment; 1 - used for experiment only; -2, -1: not used anymore
             bkt_params_md.active = active
             bkt_params_md.skill_id = skill_id
 
             await self.create(bkt_params_md, db_session)
-            # db_session.add(bkt_params_md)
-            # await db_session.commit()
 
         except Exception as e:
             logger.error(
@@ -141,10 +139,9 @@ class BktParamsRepo(BaseRepo):
                 await db_session.close()
 
     async def create_user_mastery_model(self, BktUserVariance: Type[MasteryBktBaseMixin], user_id: int, skill_id: int, pl: float, db_session: AsyncSession = None):
-
         is_new_sess = True if not db_session else False
         if not db_session:
-            db_session = await anext(get_db())
+            db_session = session_factory()
         try:
             user_mastery_model = BktUserVariance()
             user_mastery_model.user_id = user_id
@@ -161,13 +158,12 @@ class BktParamsRepo(BaseRepo):
             if is_new_sess:
                 await db_session.close()
 
-    async def update_user_mastery_model(self, user_mastery_bkt: MasteryBktBaseMixin,  pl: float, db_session: AsyncSession = None):
+    async def update_user_mastery_model(self, user_mastery_bkt: MasteryBktBaseMixin,  db_session: AsyncSession = None):
         is_new_sess = True if not db_session else False
         if not db_session:
-            db_session = await anext(get_db())
+            db_session = session_factory()
         try:
-            # user_mastery_bkt.pl = pl
-            await self.update(user_mastery_bkt, db_session, pl)
+            await self.update(user_mastery_bkt, db_session)
         except Exception as e:
             logger.error(
                 f'{e}. Update user_master_model* {user_mastery_bkt.__dict__} failed!')
