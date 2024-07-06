@@ -14,6 +14,7 @@ def calc_pnl(ppl: float, ps: float,  pt: float, pg: float, correct: bool) -> flo
 
         cpl = (ppl * ps) / (ppl * ps + (1 - ppl) * (1 - pg))
 
-    npl = cpl + (1 - cpl) * pt
+    # npl = cpl + (1 - cpl) * pt
+    npl = ppl + (cpl - ppl) * pt
 
     return npl
