@@ -4,7 +4,7 @@ from collections import defaultdict
 from typing import Type
 
 import pandas as pd
-from sqlalchemy import select
+from sqlalchemy import select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.inspection import inspect
 
@@ -93,7 +93,7 @@ class BktParamsRepo(BaseRepo):
 
     async def get_user_mastery_bkt_variance(self, BktUserVariance: MasteryBktBaseMixin,  user_id: int, skill_id: int, db_session: AsyncSession) -> MasteryBktBaseMixin | None:
         stmt = select(BktUserVariance).where(
-            BktUserVariance.user_id == user_id and BktUserVariance.skill_id == skill_id)
+                    and_( BktUserVariance.user_id == user_id, BktUserVariance.skill_id == skill_id ))
         results = await db_session.execute(stmt)
         result = results.first()
         return result[0] if result is not None else result

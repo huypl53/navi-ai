@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS `aes_params`;
+CREATE DATABASE IF NOT EXISTS `aes`;
 CREATE DATABASE IF NOT EXISTS `aes_bkt`;
 
 -- create root user and grant rights
