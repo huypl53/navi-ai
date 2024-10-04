@@ -30,6 +30,7 @@ def query_to_dict(rset):
             result[key].append(x.value)
     return result
 
+M_PL, M_PS, M_PT, M_PG = 0.17345, 0.20771, 0.42647, 0.33938
 
 class BktParamsRepo(BaseRepo):
     def __init__(self) -> None:
@@ -58,7 +59,7 @@ class BktParamsRepo(BaseRepo):
             model_type = 2  # choose by default if there is no active model
             if bkt_params_md is None:
                 # no model available
-                m_pl, m_ps, m_pt, m_pg = 0.17345, 0.20771, 0.42647, 0.33938
+                m_pl, m_ps, m_pt, m_pg = M_PL, M_PS, M_PT, M_PG 
                 asyncio.create_task(self.create_bkt_params(
                     m_pl, m_ps, m_pt, m_pg, assignment.skill_id, active=2))
             else:
@@ -176,3 +177,27 @@ class BktParamsRepo(BaseRepo):
         result = await db_session.execute(stmt)
         l = result.scalars().all()
         return l
+
+    async def update_skill_pl0(
+        self, skill_id: int, pl0: float, db_session: AsyncSession = None
+    ):
+        is_new_sess = True if not db_session else False
+        if not db_session:
+            db_session = session_factory()
+        try:
+            bkt_params_md = await self.get_infer_model_by_skill(skill_id, db_session)
+            if bkt_params_md is not None:
+                bkt_params_md.ppl = pl0
+                await self.update(bkt_params_md, db_session)
+            else:
+                await self.create_bkt_params(pl0, M_PS, M_PT, M_PG, skill_id, active=2)
+
+            return "Success"
+        except Exception as e:
+            logger.error(
+                f"{e}. Update bkt_params_model* {bkt_params_md.__dict__} failed!"
+            )
+            return "Failed"
+        finally:
+            if is_new_sess:
+                await db_session.close()

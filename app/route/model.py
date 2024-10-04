@@ -17,13 +17,27 @@ _assigment_repo = AssignmentRepo()
 
 
 @router.post("/calc-mastery")
-async def calc_mastery(assignment: AssignmentSch, db_session: AsyncSession = Depends(get_db)):
+async def calc_mastery(
+    assignment: AssignmentSch, db_session: AsyncSession = Depends(get_db)
+):
     logger.info(f"Get assigment: {assignment}")
 
     # Write assigment to DB
     # assign = await _assigment_repo.add_assginment(assignment, db_session)
     # return result
     return await _model_repo.get_mastery(assignment, db_session)
+
+
+@router.post("/update-skill-pl/")
+async def calc_mastery(
+    skill_id: int, pl: float, db_session: AsyncSession = Depends(get_db)
+):
+    logger.info(f"Get skill id: {skill_id}")
+
+    # Write assigment to DB
+    # assign = await _assigment_repo.add_assginment(assignment, db_session)
+    # return result
+    return await _model_repo.update_skill_pl0(skill_id, pl, db_session)
 
 
 @router.post("/save-model")
