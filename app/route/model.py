@@ -28,10 +28,20 @@ async def calc_mastery(
     return await _model_repo.get_mastery(assignment, db_session)
 
 
+from pydantic import BaseModel
+
+
+class SessionPl(BaseModel):
+    skill_id: int
+    pl: float
+
+
 @router.post("/update-skill-pl/")
-async def calc_mastery(
-    skill_id: int, pl: float, db_session: AsyncSession = Depends(get_db)
+async def update_session_pl(
+    session_pl_update: SessionPl, db_session: AsyncSession = Depends(get_db)
 ):
+    skill_id = session_pl_update.skill_id
+    pl = session_pl_update.pl
     logger.info(f"Get skill id: {skill_id}")
 
     # Write assigment to DB
